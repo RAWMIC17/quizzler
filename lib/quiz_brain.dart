@@ -1,15 +1,23 @@
 import 'package:quizzler/question.dart';
 
-class QuizBrain{
-    List<Question> questionBank=[
-   Question('Some cats are actually allergic to humans', true),
+class QuizBrain {
+  //Abstraction, Encapsulation, Inheritance, Polymorphism
+  int _questionNumber = 0;
+  List<Question> _questionBank = [
+    //making question bank private by adding "_" in prefix to prevent tampering with questions and answers from main.dart file
+    Question('Some cats are actually allergic to humans', true),
     Question('You can lead a cow down stairs but not up stairs.', false),
     Question('Approximately one quarter of human bones are in the feet.', true),
     Question('A slug\'s blood is green.', true),
     Question('Buzz Aldrin\'s mother\'s maiden name was \"Moon\".', true),
     Question('It is illegal to pee in the Ocean in Portugal.', true),
-    Question('No piece of square dry paper can be folded in half more than 7 times.',false),
-    Question('In London, UK, if you happen to die in the House of Parliament, you are technically entitled to a state funeral, because the building is considered too sacred a place.',true,),
+    Question(
+        'No piece of square dry paper can be folded in half more than 7 times.',
+        false),
+    Question(
+      'In London, UK, if you happen to die in the House of Parliament, you are technically entitled to a state funeral, because the building is considered too sacred a place.',
+      true,
+    ),
     Question(
         'The loudest sound produced by any animal is 188 decibels. That animal is the African Elephant.',
         false),
@@ -23,6 +31,38 @@ class QuizBrain{
     Question(
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
-
   ];
+
+  void nexQuestion() {
+    if (_questionNumber < _questionBank.length - 1) {
+      //adding -1 to stop crashing after 13 questions and no next question comes
+      _questionNumber++;
+    }
+    print(_questionNumber);
+    print(_questionBank.length);
+  }
+
+  String getQuestionText() {
+    //removing int questionNumber from brackets because we brought it from homescreen to here
+    //separate function to get questions from a private class
+    return _questionBank[_questionNumber].questionText;
+  }
+
+  bool getQuestionAnswer() {
+    //function to check answers
+    return _questionBank[_questionNumber].questionAnswer;
+  }
+
+  bool isFinished() {
+    if (_questionNumber >= _questionBank.length-1) {
+      print("Returning True");
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  void resetQuiz() {
+    _questionNumber = 0;
+  }
 }

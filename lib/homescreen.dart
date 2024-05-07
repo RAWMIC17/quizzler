@@ -2,9 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-QuizBrain quizBrain = QuizBrain();//create a local object to use the question
+QuizBrain quizBrain = QuizBrain(); //create a local object to use the question
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,13 +38,47 @@ class _HomeScreenState extends State<HomeScreen> {
     // ),
   ];
 
+  void checkAnswer(bool userPickedAnswer) {
+    //separate function to check answer
+    bool correctanswer = quizBrain.getQuestionAnswer();
+    setState(() {
+      if (quizBrain.isFinished() == true) {
+        Alert(
+                context: context,
+                title: "Finished!!",
+                desc: "You\'ve reached the end of the quiz.")
+            .show();
+        quizBrain.resetQuiz();
+        scorekeeper = [];
+      } else {
+        if (userPickedAnswer == correctanswer) {
+          scorekeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          scorekeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+        quizBrain.nexQuestion();
+        //questionNumber = questionNumber + 1;
+        // scorekeeper.add(Icon(
+        //   Icons.check,
+        //   color: Colors.green,
+        // ));
+      }
+    });
+  }
+
   // List<String> questions = [
   //   'You can lead a cow down stairs but not up stairs.',
   //   'Approximately one quarter of human bones are in the feet.',
   //   'A slug\'s blood is green.'
   // ];
 
-  int questionNumber = 0;
+  //int questionNumber = 0;
 
   // List<bool> answers = [false, true, true];
 
@@ -74,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Center(
                 child: Text(
                   textAlign: TextAlign.center,
-                  quizBrain.questionBank[questionNumber].questionText, // questions.first
+                  quizBrain.getQuestionText(), // questions.first
                   style: TextStyle(color: Vx.white, fontSize: 25),
                 ),
               ),
@@ -84,21 +119,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton(
                   onPressed: () {
-                    bool correctanswer =
-                        quizBrain.questionBank[questionNumber].questionAnswer;
-                    if (correctanswer == true) {
-                      print("Right");
-                    } else {
-                      print("Wrong");
-                    }
-                    setState(() {
-                      questionNumber = questionNumber + 1;
-                      // scorekeeper.add(Icon(
-                      //   Icons.check,
-                      //   color: Colors.green,
-                      // ));
-                    });
-                    print(questionNumber);
+                    checkAnswer(true);
+                    // bool correctanswer =
+                    //     quizBrain.getQuestionAnswer();
+                    // if (correctanswer == true) {
+                    //   print("Right");
+                    // } else {
+                    //   print("Wrong");
+                    // }
+                    // setState(() {
+                    //   quizBrain.nexQuestion();
+                    //   //questionNumber = questionNumber + 1;
+                    //   // scorekeeper.add(Icon(
+                    //   //   Icons.check,
+                    //   //   color: Colors.green,
+                    //   // ));
+                    // });
+                    //print(questionNumber);
                   },
                   child: "True".text.xl2.color(Vx.white).make(),
                   style: ButtonStyle(
@@ -113,21 +150,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(10.0),
                 child: TextButton(
                   onPressed: () {
-                    bool correctanswer =
-                        quizBrain.questionBank[questionNumber].questionAnswer;
-                    if (correctanswer == false) {
-                      print("Right");
-                    } else {
-                      print("Wrong");
-                    }
-                    setState(() {
-                      questionNumber = questionNumber + 1;
-                      // scorekeeper.add(Icon(
-                      //   Icons.close,
-                      //   color: Colors.red,
-                      // ));
-                    });
-                    print(questionNumber);
+                    checkAnswer(false);
+                    // bool correctanswer = quizBrain.getQuestionAnswer();
+                    // if (correctanswer == false) {
+                    //   print("Right");
+                    // } else {
+                    //   print("Wrong");
+                    // }
+                    // setState(() {
+                    //   quizBrain.nexQuestion();
+                    //   //questionNumber = questionNumber + 1;
+                    //   // scorekeeper.add(Icon(
+                    //   //   Icons.close,
+                    //   //   color: Colors.red,
+                    //   // ));
+                    // });
+                    //print(questionNumber);
                   },
                   child: "False".text.xl2.color(Vx.white).make(),
                   style: ButtonStyle(
